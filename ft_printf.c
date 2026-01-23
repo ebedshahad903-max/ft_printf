@@ -1,6 +1,6 @@
 #include "ft_printf.h"
 
-static int  dispatch(char specifier, va_list args)
+static int  specifier_dispatch(char specifier, va_list args)
 {
     if (specifier == 'c')
         return (print_char(va_arg(args, int)));
@@ -18,7 +18,8 @@ static int  dispatch(char specifier, va_list args)
         return (write(1, "%", 1));
     return (0);
 }
-
+void parse_flags(const char *format, int *i, t_format *fmt) { while (format[*i] == '-' || format[*i] == '0' || format[*i] == '#' || format[*i] == '+' || format[*i] == ' ') { if (format[*i] == '-') fmt->minus = 1; if (format[*i] == '0') fmt->zero = 1; if (format[*i] == '#') fmt->hash = 1; if (format[*i] == '+') fmt->plus = 1; if (format[*i] == ' ') fmt->space = 1; (*i)++; }
+ }
 int ft_printf(const char *format, ...)
 {
     va_list args;
@@ -30,53 +31,26 @@ int ft_printf(const char *format, ...)
     count = 0;
     while (format[i])
     {
-        if (format[i] == '%')
+        if (format[i] == '%' &&
+            (format[i+1] == 's' || format[i+1] == 'c' || format[i+1] == 'd' || format[i+1] == 'i' ||
+             format[i+1] == 'u' || format[i+1] == 'x' || format[i+1] == 'X' || format[i+1] == 'p'))
         {
-            count += dispatch(format[i + 1], args);
+            count += specifier_dispatch(format[i+1], args);
             i++;
         }
+        else if 
         else
+        {
             count += write(1, &format[i], 1);
-        i++;
+            i++;
+        }
     }
     va_end(args);
     return (count);
 }
-// #include <stdio.h>
-// int main()
-// {
-//    // int res1;
-//     // printf("|||||||||||||||||||||||||||||||||||||||||||||||||\n");
-//     // printf ("First Testcase : Pure string \n");
-//     //  printf ("with escape seq : \\t , \\n ,\\v ,\\ooo ,\\f,\\ \n");
-//     // int res1 =printf ("shahd1\tshahad2\t");
-//     // printf("len1 = %d\n",res1);
-//     // int res2= ft_printf("shahd1\tshahad2\t");
-//     // printf("len2 = %d",res2);
-//     // printf("|||||||||||||||||||||||||||||||||||||||||||||||||\n");
-//     // printf ("sec Testcase : print a char \n");
-//     // char letter = 'Q';
-//     // res1=printf("%c",letter);
-//     // printf("len1 = %d\n",res1);
-//     // res2=ft_printf("%c",letter);
-//     // printf("len2 = %d\n",res2);
-//     // //------------------------------------------//
-//     // char n ='N';
-//     //  res1=printf("Hello %c How are you%c ?",letter,n);
-//     // printf("len1 = %d\n",res1);
-//     // res2=ft_printf("Hello %c How are you%c ?",letter,n);
-//     // printf("len2 = %d\n",res2);
-//     printf("-------------------------------------------------------------------------\n");
-//    // printf ("Third  Testcase :p:: The void * pointer argument has to be printed in hexadecimal format. \n");
-//     int m = 30;
-//     //int *ptr = &m; // pointer to x
-// //printf("Value of x: %d\n", m);
-//    //printf("%p\n",(void *) ptr);
-//   // printf("\nlen1 = %d\n",res1);
-//    //ft_printf("%p",(void *) ptr);
-    
-   
-//    printf("\n ORIG : \t [%p]\n\n");
-//    ft_printf("\n NEWW : \t [%p]\n\n");
-//    return 0;
-// }
+int main ()
+{
+    ft_printf("HELLO %s name is " , "AHMED");
+    return 0; 
+}
+// 

@@ -5,6 +5,18 @@
 # include <unistd.h>
 # include <stdlib.h>
 
+typedef struct s_format 
+{ 
+    int minus;
+    int zero; 
+    int width; 
+    int dot; 
+    int precision; 
+    int hash; 
+    int plus; 
+    int space; 
+    char specifier;
+ } t_format;
 int     ft_printf(const char *format, ...);
 
 int     print_char(int c);
